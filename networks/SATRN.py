@@ -5,7 +5,10 @@ import numpy as np
 import math
 import random
 
-from dataset import START, PAD
+START = "<SOS>"
+END = "<EOS>"
+PAD = "<PAD>"
+SPECIAL_TOKENS = [START, END, PAD]
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
