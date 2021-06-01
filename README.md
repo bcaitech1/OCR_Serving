@@ -19,5 +19,5 @@ model = OCRmodel( token_path = token_path,
 model.load()
 
 # inference
-sequence_str, latency_time = model.inference( image_path = image_path )
+sequence_str, latency = model.inference( image_path = image_path )
 ```
