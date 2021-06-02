@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BoostCamp AI Tech - P stage 4 : unnamed</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/main.css">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200&display=swap" rel="stylesheet">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$', '$$']]}
+          });
+    </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+
+</head>
+
+<body>
+
+    <div class="team-label"> Unnamed OCR </div>
+    <div class="title-container">
+        <div class="title-label"> $\LaTeX$ Reader </div>
+    </div>
+
+    <form class="upload-form" action="" method="post" enctype="multipart/form-data">
+      <input type="file" name="img" accept="image/*">
+      <input class="uploder" type="submit" value="업로드">
+    </form>
+
+    {% if LaTeX == "DUMMY" %}
+        <img class="dummy-img" src="../static/files/dummy.png" alt="dummy">
+    {% else %}
+        <img class="user-img" src="../static/files/user_file.png">
+        <br>
+        <div class="eqn"> {{ INFO }} <br> {{ LaTeX }} </div>
+    {% endif %}
+    <!-- <script src="../static/js/main.js" type="module"></script> -->
+
+
+</body>
+</html>
