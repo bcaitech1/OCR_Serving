@@ -40,3 +40,7 @@ html, body {
 .eqn {
     font-size: 3vh;
 }
+
+.uploader {
+    padding-bottom: 2vh;
+}
