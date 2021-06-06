@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
+from Model.web_inference import OCRModel
 
 UPLOAD_FOLDER = "C:\\Users\\l_jad\\Desktop\\OCR_serving\\static\\files"
 LATEX_STRING = " "
@@ -12,6 +13,10 @@ FILE_INFO = ""
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# model load
+model = OCRModel( token_path = "./Model/gt.txt" ,
+                  model_path = "./Modle/weights.pth")
+model.load()
 
 @app.route('/', methods=['GET', 'POST'])
 def mainPage():
@@ -24,6 +29,9 @@ def mainPage():
             FILE_INFO = user_file_name
             print(user_file_name)
 
+            ## model run
+            sequence_str, latency = model.inference(image_path = file.filename)
+            ##
             filestr = file.read()
             npimg = np.frombuffer(filestr, np.uint8)
             img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
@@ -38,6 +46,8 @@ def mainPage():
             
             FILE_INFO = "std : " + str(std_img) + ", mean : " + str(mean_img) # 서버 단에서 입력된 이미지를 처리해 돌려주는 게 가능하다는 것을 증명
 
+            # model output
+            LATEX_STRING = sequence_str
             LATEX_STRING = "$$s^a+m^p+l^e=\\frac{equa}{tion}$$"
             #return jsonify({'LATEX':LATEX_STRING}) # js를 사용해 보자
 
