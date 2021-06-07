@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
 from Model.web_inference import OCRModel
 
+#test
 UPLOAD_FOLDER = "C:\\Users\\l_jad\\Desktop\\OCR_serving\\static\\files"
 LATEX_STRING = " "
 FILE_INFO = ""
