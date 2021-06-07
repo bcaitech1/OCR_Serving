@@ -7,6 +7,8 @@ from werkzeug.utils import secure_filename
 from Model.web_inference import OCRModel
 
 #test
+# joonam test
+
 UPLOAD_FOLDER = "C:\\Users\\l_jad\\Desktop\\OCR_serving\\static\\files"
 LATEX_STRING = " "
 FILE_INFO = ""
