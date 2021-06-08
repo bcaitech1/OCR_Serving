@@ -18,7 +18,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # model load
 model = OCRModel( token_path = "./Model/gt.txt" ,
-                  model_path = "./Modle/weights.pth")
+                  model_path = "./Model/weights.pth")
 model.load()
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,12 +32,14 @@ def mainPage():
             FILE_INFO = user_file_name
             print(user_file_name)
 
-            ## model run
-            sequence_str, latency = model.inference(image_path = file.filename)
-            ##
+
             filestr = file.read()
             npimg = np.frombuffer(filestr, np.uint8)
             img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+            ## model run
+            sequence_str, latency = model.inference(image = img)
+            print(latency) # 소요시간.
+            ##
 
             '''
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], "user_file.png")) # js 쓰면 파일 저장 안 하고도 전달 가능
