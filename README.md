@@ -19,5 +19,6 @@ model = OCRmodel( token_path = token_path,
 model.load()
 
 # inference
-sequence_str, latency = model.inference( image_path = image_path )
+sequence_str, latency = model.inference( image = image )
+# iamge = numpy.arr 형태의 이미지 vector (cv2로 불러온)
 ```
