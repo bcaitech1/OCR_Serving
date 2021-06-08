@@ -12,28 +12,33 @@
         MathJax.Hub.Config({
           tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$', '$$']]}
           });
+
     </script>
-    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
     <script src="../static/js/main.js" type="module"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 </head>
 
 <body>
 
-    <div class="team-label"> Unnamed OCR </div>
-    <div class="title-container">
-        <div class="title-label"> $\LaTeX$ Reader </div>
+<div class="team-label"> Unnamed OCR</div>
+
+<div class="title-container">
+    <div class="title-label"> $\LaTeX$ Reader</div>
+</div>
+
+<form class="upload-form" name="upload-form" id="upload-form" action="" method="post" enctype="multipart/form-data">
+    <div class="image-container">
+        <input type="file" name="img" id="input-image" accept="image/*">
+        <input class="uploder" type="button" value="업로드">
     </div>
+</form>
 
-    <form class="upload-form" name="upload-form" id="upload-form" action="" method="post" enctype="multipart/form-data">
-        <div class="image-container">
-            <input type="file" name="img" id="input-image" accept="image/*">
-            <input class="uploder" type="button" value="업로드">
-        </div>
-    </form>
+<img class="user-img" id="preview-image" src="../static/files/dummy.png">
 
-    <img class="user-img"  id="preview-image" src="../static/files/dummy.png">
-
+<div class="equation" , id="equation"></div>
 
 
 </body>
