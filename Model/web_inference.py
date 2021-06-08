@@ -9,6 +9,8 @@ from torchvision import transforms
 from PIL import Image
 import time
 import cv2
+# import albumentations as A
+# from albumentations.pytorch import ToTensorV2
 
 
 START = "<SOS>"
@@ -59,12 +61,19 @@ class OCRModel():
             token_to_id = token_to_id,
             id_to_token = id_to_token
                 )
-        self.model_path =model_path
+        self.model_path = model_path
+        # self.transformed = A.Compose(
+        # [
+        #     A.Normalize(always_apply=True),
+        #     ToTensorV2()
+        # ]
+        # )
         self.transformed = transforms.Compose(
-        [
-            transforms.Resize((128, 128)),
-            transforms.ToTensor(),
-        ]
+            [
+                transforms.Resize((128,128)),
+                transforms.ToTensor(),
+
+            ]
         )
 
     def load(self):
@@ -93,7 +102,12 @@ class OCRModel():
 
     def inference(self, image):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        test = self.transformed(image)
+        image = cv2.resize(image, (128,128))
+        image = image/255
+        test = torch.tensor(image, dtype=torch.float)
+        test = test.unsqueeze(0)
+        # test = self.transformed(image=image)
+        # test = test["image"]
         test = torch.stack([test, test], dim=0)
         dummy_gt = torch.zeros((2, 232)) + 158
         sequence_str, latency = self.run_model(test, dummy_gt)
