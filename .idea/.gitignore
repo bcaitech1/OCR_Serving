@@ -6,3 +6,9 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+/deployment.xml
+/misc.xml
+/modules.xml
+/OCR_Serving.iml
+/vcs.xml
+../.idea
