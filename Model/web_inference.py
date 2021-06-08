@@ -8,6 +8,7 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import time
+import cv2
 
 
 START = "<SOS>"
@@ -90,7 +91,16 @@ class OCRModel():
         return sequence_str, time.time() - start
 
 
-    def inference(self, image_path):
+    def inference(self, image):
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        test = self.transformed(image)
+        test = torch.stack([test, test], dim=0)
+        dummy_gt = torch.zeros((2, 232)) + 158
+        sequence_str, latency = self.run_model(test, dummy_gt)
+        return sequence_str, latency
+
+
+    def inference_(self, image_path):
         rgb = 1
         input_image = Image.open(image_path)
         if rgb == 3:
