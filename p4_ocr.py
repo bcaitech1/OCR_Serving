@@ -34,8 +34,9 @@ def mainPage():
             ## model run
             sequence_str, latency = model.inference(image = img)
             print(latency) # 소요 시간
+            print(sequence_str[0])
 
-            LATEX_STRING = sequence_str
+            LATEX_STRING = sequence_str[0]
             ##
 
             return jsonify({'result': LATEX_STRING}) # ajax를 이용해 비동기적으로 응답 전달
@@ -45,7 +46,7 @@ def mainPage():
 
 
 if __name__ == "__main__":
-    app.run(host='localhost', debug=True, port=80)
+    app.run(host='0.0.0.0', debug=True, port=8000)
 
 
 
