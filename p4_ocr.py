@@ -8,8 +8,8 @@ from Model.web_inference import OCRModel
 
 
 ## model load
-model = OCRModel( token_path = "./Model/gt.txt" ,
-                  model_path = "./Model/weights.pth")
+model = OCRModel( token_path = "./Model/tokens.txt" ,
+                  model_path = "./Model/test_model.pth")
 model.load()
 ##
 
