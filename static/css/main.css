@@ -48,6 +48,19 @@ html, body {
     padding-bottom: 3.5vh;
 }
 
+.equation-label {
+    color: #716F6F;
+    font-size: 2vh;
+}
+
+.latex-label {
+    color: #716F6F;
+    font-size: 2vh;
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh;
+}
+
+
 #back {
 position: absolute;
 z-index: 100;
@@ -60,7 +73,7 @@ top:0;
 #loadingBar {
 position:absolute;
 left:50%;
-top: 60%;
+top: 55%;
 display:none;
 z-index:200;
 }
