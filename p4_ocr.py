@@ -36,8 +36,7 @@ def mainPage():
             print(latency) # 소요 시간
             print(sequence_str[0])
 
-            LATEX_STRING = sequence_str[0]
-            ##
+            LATEX_STRING = "$$"+sequence_str[0]+"$$"
 
             return jsonify({'result': LATEX_STRING}) # ajax를 이용해 비동기적으로 응답 전달
 
