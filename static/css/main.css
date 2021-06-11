@@ -38,8 +38,29 @@ html, body {
     padding-bottom: 2vh;
 }
 
+.img-container {
+    display: flex;
+    align-content: center;
+}
+
 .user-img {
     width: 35vw;
     padding-bottom: 3.5vh;
 }
 
+#back {
+position: absolute;
+z-index: 100;
+background-color: #000000;
+display:none;
+left:0;
+top:0;
+}
+
+#loadingBar {
+position:absolute;
+left:50%;
+top: 60%;
+display:none;
+z-index:200;
+}
