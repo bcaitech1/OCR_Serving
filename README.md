@@ -11,6 +11,7 @@
 - SATRN : [Download](https://drive.google.com/file/d/1HhDG3eNpVO4VICIGvZzBsdTbRFS8mODA/view?usp=sharing)
 
 ### Docker build & Run
+기본적으로 Docker와 nvidia-docker 가 해당 서버 또는 로컬에 설치 되어 있어야 합니다.
 ```angular2html
 # build
 docker bulid -t unnamed_OCR . 
