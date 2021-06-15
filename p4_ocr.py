@@ -9,7 +9,7 @@ from Model.web_inference import OCRModel
 
 ## model load
 model = OCRModel( token_path = "./Model/tokens.txt" ,
-                  model_path = "./Model/test_model.pth")
+                  model_path = "./Model/SATRN.pth")
 model.load()
 ##
 
