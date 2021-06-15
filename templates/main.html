@@ -7,17 +7,10 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css"
+          integrity="sha512-vmXqikRa5kmI3gOQygzml5nV+5NGxG8rt8KWHKj8JYYK12JUl2L8RBfWinFGTzvpwwsIRcINy9mhLyodnmzjig=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$', '$$']]}
-          });
-
-    </script>
-    <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    <script src="../static/js/main.js" type="module"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 </head>
 
@@ -37,9 +30,12 @@
 </form>
 
 
+<div class="notice-label" id="notice-label"></div>
 
+<div>
+    <img class="user-img" id="preview-image" src="../static/files/dummy.png">
+</div>
 
-<img class="user-img" id="preview-image" src="../static/files/dummy.png">
 
 <div class="equation-label" id="equation-label"> </div>
 <div class="equation" id="equation"></div>
@@ -47,6 +43,22 @@
 <div class="latex-label" id="latex-label"> </div>
 <div class="latex" id="latex"></div>
 
+
+
+
+<script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$', '$$']]}
+          });
+</script>
+
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"
+        integrity="sha512-E+gDQcIvNXE60SjCS38ysf1mGh4ObBpKcUOp0oEaHQHQAdaN2p7GelOpgEdpTuCLoIJyLkNXiqFZbyD9Ak/Ygw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="../static/js/main.js" type="module"></script>
 </body>
 </html>
 
