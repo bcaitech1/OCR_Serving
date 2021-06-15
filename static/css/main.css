@@ -9,6 +9,10 @@ html, body {
 
 }
 
+img {
+  max-width: 100%;
+}
+
 .team-label {
     padding-top: 1vh;
     padding-bottom: 1vh;
@@ -35,7 +39,7 @@ html, body {
 }
 
 .uploader {
-    padding-bottom: 2vh;
+    padding-bottom: 1.5vh;
 }
 
 .img-container {
@@ -43,9 +47,17 @@ html, body {
     align-content: center;
 }
 
+.notice-label {
+    color: #716F6F;
+    font-size: 2vh;
+    padding-bottom: 2vh;
+}
+
 .user-img {
     width: 35vw;
-    padding-bottom: 3.5vh;
+    padding-bottom: 3vh;
+    max-width: 100%;
+
 }
 
 .equation-label {
@@ -77,3 +89,4 @@ top: 55%;
 display:none;
 z-index:200;
 }
+
