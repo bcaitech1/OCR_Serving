@@ -70,52 +70,54 @@ function upload(e) {
     let formData = new FormData(document.getElementById("upload-form"))
 
     setCropper()
-    const croppedImage = $image.cropper('getCroppedCanvas').toDataURL("image/png");
-    formData.append("img", croppedImage)
-    destroyCropper()
 
+    $image.cropper('getCroppedCanvas').toBlob(function (blob) {
+        var formData = new FormData();
+
+        formData.append('img', blob);
+
+        $.ajax({
+            url: "/",
+            contentType: false,
+            processData: false,
+            type: "POST",
+            data: formData,
+            beforeSend: function () {
+                displayLoadingbar()
+            },
+            complete: function () {
+                hideLoadingbar()
+            },
+            success: function (response) {
+                hideLoadingbar()
+
+                const result = response["result"]
+                const result_len = result.length
+                const result_splited = result.substring(2, result_len - 2)
+
+                noticeLabel.innerText = " "
+
+                equationLabel.innerText = "Recognized equation"
+                equationDiv.innerText = result
+
+                latexLabel.innerText = "Pasteable LaTeX"
+                latexDiv.innerText = result_splited // 앞뒤 두글자씩 자르기
+
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]) // LaTeX 렌더링을 다시 요청?
+
+            },
+            error: function (response) {
+                alert("upload failed.")
+            },
+        })
+    })
+
+
+    const croppedImage = $image.cropper('getCroppedCanvas').toDataURL("image/png");
     previewImage.src = croppedImage
     previewImage.style.cssText = "width: 30vw;"
+    destroyCropper()
 
-
-    $.ajax({
-        url: "/",
-        contentType: false,
-        processData: false,
-        type: "POST",
-        data: formData,
-        beforeSend: function () {
-            displayLoadingbar()
-        },
-        complete: function () {
-            hideLoadingbar()
-        },
-        success: function (response) {
-            hideLoadingbar()
-
-            const result = response["result"]
-            const result_len = result.length
-            const result_splited = result.substring(2, result_len - 2)
-
-            noticeLabel.innerText = " "
-
-            equationLabel.innerText = "Recognized equation"
-            equationDiv.innerText = result
-
-            latexLabel.innerText = "Pasteable LaTeX"
-            latexDiv.innerText = result_splited // 앞뒤 두글자씩 자르기
-
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]) // LaTeX 렌더링을 다시 요청?
-
-
-            // 렌더링 깨지는지 테스트용
-            const test = document.getElementById("test")
-            test.innerText = MathJax.Hub.isJax(latexDiv)
-        },
-        error: function (response) {
-            alert("upload failed.")
-        },
-    })
 
 }
 
