@@ -18,6 +18,7 @@ __Instance 환경__
 - python 3.7
 - cuda: 11.3.1, cudnn:8
 
+docker build 예시
 ```angular2html
 # build
 docker bulid -t unnamed_OCR . 
