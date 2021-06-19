@@ -31,9 +31,9 @@ __Instance 환경__
 docker build 예시
 ```angular2html
 # build
-docker bulid -t unnamed_OCR . 
+docker bulid -t unnamed_ocr . 
 # run
-docker run --gpus all -it -p 8000:5000 unnamed_OCR
+docker run --gpus all -it -p 8000:5000 unnamed_ocr
 python3 p4_ocr.py
 ```
 
