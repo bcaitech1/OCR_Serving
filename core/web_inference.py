@@ -9,8 +9,8 @@ from torchvision import transforms
 from PIL import Image
 import time
 import cv2
-# import albumentations as A
-# from albumentations.pytorch import ToTensorV2
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
 
 
 START = "<SOS>"
@@ -55,26 +55,27 @@ def id_to_string(tokens, vocab ,do_eval=0):
 
 
 class OCRModel():
-    def __init__(self, token_path, model_path ):
+    def __init__(self, token_path, model_path, img_h=128, img_w=250 ):
         token_to_id, id_to_token = load_vocab(token_path)
         self.vocab = dict(
             token_to_id = token_to_id,
             id_to_token = id_to_token
                 )
         self.model_path = model_path
-        # self.transformed = A.Compose(
-        # [
-        #     A.Normalize(always_apply=True),
-        #     ToTensorV2()
-        # ]
-        # )
-        self.transformed = transforms.Compose(
-            [
-                transforms.Resize((128,128)),
-                transforms.ToTensor(),
-
-            ]
+        self.transformed = A.Compose(
+        [
+            A.Resize(height=img_h, width=img_w),
+            A.Normalize(always_apply=True),
+            ToTensorV2()
+        ]
         )
+        # self.transformed = transforms.Compose(
+        #     [
+        #         transforms.Resize((32,100)),
+        #         transforms.ToTensor(),
+        #
+        #     ]
+        # )
 
     def load(self):
         self.model = torch.load(self.model_path)
@@ -105,25 +106,28 @@ class OCRModel():
         image = cv2.resize(image, (128,128))
         image = image/255
         test = torch.tensor(image, dtype=torch.float)
-        test = test.unsqueeze(0)
+        test = test.unsqueeze(0).unsqueeze(0)
         # test = self.transformed(image=image)
         # test = test["image"]
-        test = torch.stack([test, test], dim=0)
-        dummy_gt = torch.zeros((2, 232)) + 158
+        # test = torch.stack([test,test], dim=0)
+        print(test.size())
+        dummy_gt = torch.zeros((1, 232)) + 158
+        print(dummy_gt.size())
         sequence_str, latency = self.run_model(test, dummy_gt)
         return sequence_str, latency
 
 
-    def inference_(self, image_path):
-        rgb = 1
-        input_image = Image.open(image_path)
-        if rgb == 3:
-            input_image = input_image.convert("RGB")
-        elif rgb == 1:
-            input_image = input_image.convert("L")
-        test = self.transformed(input_image)
-        test = torch.stack([test,test], dim=0)
-        dummy_gt = torch.zeros((2,232))+158
+    def inference_rgb(self, image):
+        rgb = 3
+        input_image = cv2.cvtColor(image, cv2.IMREAD_COLOR)
+        # input_image = cv2.resize(input_image, (100,32))
+        # if rgb == 3:z
+        #     input_image = input_image.convert("RGB")
+        # elif rgb == 1:
+        #     input_image = input_image.convert("L")
+        test = self.transformed(image=input_image)['image']
+        test = test.unsqueeze(0)
+        dummy_gt = torch.zeros((1,232))+158
         sequence_str, latency = self.run_model(test, dummy_gt)
         return sequence_str, latency
 
