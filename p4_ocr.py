@@ -2,14 +2,17 @@
 import os
 import cv2
 import numpy as np
+import sys
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from werkzeug.utils import secure_filename
-from Model.web_inference import OCRModel
+from core.web_inference import OCRModel
+sys.path.append('./core')
 
 
 ## model load
-model = OCRModel( token_path = "./Model/tokens.txt" ,
-                  model_path = "./Model/SATRN.pth")
+model = OCRModel( token_path = './core/tokens.txt',
+        model_path = './core/weight/SATRN_0620.pth',
+                img_h=64,img_w=256)
 model.load()
 ##
 
@@ -32,7 +35,7 @@ def mainPage():
             ##
 
             ## model run
-            sequence_str, latency = model.inference(image = img)
+            sequence_str, latency = model.inference_rgb(image = img)
             print(latency) # 소요 시간
             print(sequence_str[0])
 
