@@ -1,0 +1,7 @@
+#files
+*.pth
+test.py
+
+#dirs
+.idea/
+__pycache__/

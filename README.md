@@ -1,13 +1,23 @@
 ## OCR Serving
+수식 인식기 배포
+
+## Members.
+
+[김익재](https://github.com/ijjustinKim) | [남지인](https://github.com/zeen263) | [이주남](https://github.com/joon1230) | [이진성](https://github.com/ssun-g) | [장형주](https://github.com/hangjoo) | [최길희](https://github.com/grazerhee)
 
 
-#### Stack
+## Architecture
+![arch](./img/architecture.png)
+
+
+### Stack
 - Flask
+- js
 - torch
-
+- docker
 
 ### model weight 
-학습된 모델을 다운 링크 입니다. Model 디렉토리 안에 넣고 모델 불러오는 함수 호출 할때 인자로 해당 파일 경로를 넣어야 합니다.
+학습된 모델을 다운 링크 입니다. core/weight 디렉토리 안에 넣고 모델 불러오는 함수 호출 할때 인자로 해당 파일 경로를 넣어야 합니다.
 - SATRN : [Download](https://drive.google.com/file/d/1HhDG3eNpVO4VICIGvZzBsdTbRFS8mODA/view?usp=sharing)
 
 ### Docker build & Run
