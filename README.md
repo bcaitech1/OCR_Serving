@@ -24,8 +24,9 @@
 기본적으로 Docker와 nvidia-docker 가 해당 서버 또는 로컬에 설치 되어 있어야 합니다.
 
 __Instance 환경__
-- OS: ubuntu16.04 (GCP)
-- python 3.7
+- OS: ubuntu16.04 
+- SERVER : GCP(n1-standard-4) CPU 4, RAM 15GB 
+- GPU : NVIDIA Tesla T4
 - cuda: 11.3.1, cudnn:8
 
 docker build 예시
