@@ -33,7 +33,7 @@ function readImage(input) {
             destroyCropper()
 
             // 새 이미지를 로드하면 equation 지우기
-            noticeLabel.innerText = "박스를 드래그해 수식 영역을 조절한 뒤, 업로드 버튼을 눌러 주세요."
+            noticeLabel.innerText = "박스를 드래그해 수식 영역을 조절한 뒤, 변환 버튼을 눌러 주세요."
             equationLabel.innerText = " "
             equationDiv.innerText = " "
             latexLabel.innerText = " "
