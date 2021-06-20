@@ -11,7 +11,7 @@ sys.path.append('./core')
 
 ## model load
 model = OCRModel( token_path = './core/tokens.txt',
-        model_path = './core/weight/SATRN_0620.pth',
+        model_path = './core/weight/SATRN_effinet.pth',
                 img_h=64,img_w=256)
 model.load()
 ##
