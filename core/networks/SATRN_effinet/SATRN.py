@@ -4,27 +4,9 @@ import random
 import torch
 import torch.nn as nn
 
+from .backbones import Shallow_cnn, DeepCNN300, efficientnet_backbone
 from .Attention import MultiHeadAttention
 from .FeedForward import FeedForward1D, FeedForward2D
-
-
-class Shallow_cnn(nn.Module):
-    def __init__(self, in_channels, hidden_dim):
-        super(Shallow_cnn, self).__init__()
-
-        self.conv_1 = nn.Conv2d(in_channels, hidden_dim // 2, kernel_size=3, stride=1, padding=1)
-        self.bn_1 = nn.BatchNorm2d(hidden_dim // 2)
-        self.pool_1 = nn.MaxPool2d(kernel_size=2, stride=2)
-
-        self.conv_2 = nn.Conv2d(hidden_dim // 2, hidden_dim, kernel_size=3, stride=1, padding=1)
-        self.bn_2 = nn.BatchNorm2d(hidden_dim)
-        self.pool_2 = nn.MaxPool2d(kernel_size=2, stride=2)
-
-    def forward(self, x):
-        out = self.pool_1(self.bn_1(self.conv_1(x)))
-        out = self.pool_2(self.bn_2(self.conv_2(out)))
-
-        return out
 
 
 # Reference: https://github.com/Media-Smart/vedastr/blob/0fd2a0bd7819ae4daa2a161501e9f1c2ac67e96a/vedastr/models/bodies/sequences/transformer/position_encoder/adaptive_2d_encoder.py#L8
@@ -135,13 +117,13 @@ class TransformerEncoderLayer1D(nn.Module):
 
 # Reference: https://github.com/Media-Smart/vedastr/blob/0fd2a0bd7819ae4daa2a161501e9f1c2ac67e96a/vedastr/models/bodies/sequences/transformer/unit/encoder.py#L31
 class TransformerEncoderLayer2D(nn.Module):
-    def __init__(self, in_channels, k_channels, v_channels, n_head=8, dropout=0.1):
+    def __init__(self, in_channels, filter_dim, k_channels, v_channels, n_head=8, dropout=0.1):
         super(TransformerEncoderLayer2D, self).__init__()
 
         self.attention = MultiHeadAttention(in_channels=in_channels, k_channels=k_channels, v_channels=v_channels, n_head=n_head, dropout=dropout)
         self.attention_norm = nn.LayerNorm(normalized_shape=in_channels)
 
-        self.feedforward = FeedForward2D(hidden_dim=in_channels, dropout=dropout)
+        self.feedforward = FeedForward2D(hidden_dim=in_channels, filter_dim=filter_dim, dropout=dropout)
         self.feedforward_norm = nn.LayerNorm(normalized_shape=in_channels)
 
     def forward(self, src, src_mask=None):
@@ -164,7 +146,7 @@ class TransformerEncoderLayer2D(nn.Module):
 
 # Reference: https://github.com/Media-Smart/vedastr/blob/0fd2a0bd7819ae4daa2a161501e9f1c2ac67e96a/vedastr/models/bodies/sequences/transformer/unit/decoder.py#L10
 class TransformerDecoderLayer1D(nn.Module):
-    def __init__(self, in_channels, k_channels, v_channels, n_head=8, dropout=0.1):
+    def __init__(self, in_channels, filter_dim, k_channels, v_channels, n_head=8, dropout=0.1):
         super(TransformerDecoderLayer1D, self).__init__()
 
         self.self_attention = MultiHeadAttention(in_channels=in_channels, k_channels=k_channels, v_channels=v_channels, n_head=n_head, dropout=dropout)
@@ -173,7 +155,7 @@ class TransformerDecoderLayer1D(nn.Module):
         self.attention = MultiHeadAttention(in_channels=in_channels, k_channels=k_channels, v_channels=v_channels, n_head=n_head, dropout=dropout)
         self.attention_norm = nn.LayerNorm(normalized_shape=in_channels)
 
-        self.feedforward = FeedForward1D(hidden_dim=in_channels, dropout=dropout)
+        self.feedforward = FeedForward1D(hidden_dim=in_channels, filter_dim=filter_dim, dropout=dropout)
         self.feedforward_norm = nn.LayerNorm(normalized_shape=in_channels)
 
     def forward(self, tgt, src, tgt_mask=None, src_mask=None):
@@ -198,15 +180,17 @@ class TransformerDecoderLayer1D(nn.Module):
 
 # Reference: https://github.com/Media-Smart/vedastr/blob/0fd2a0bd7819ae4daa2a161501e9f1c2ac67e96a/vedastr/models/bodies/sequences/transformer/encoder.py#L15
 class TransformerEncoder(nn.Module):
-    def __init__(self, in_channels, hidden_dim, block_num, max_h=200, max_w=200, n_head=8, dropout=0.1):
+    def __init__(self, in_channels, filter_dim, hidden_dim, block_num, max_h=200, max_w=200, n_head=8, dropout=0.1):
         super(TransformerEncoder, self).__init__()
 
-        self.shallow_cnn = Shallow_cnn(in_channels=in_channels, hidden_dim=hidden_dim)
+        # self.shallow_cnn = Shallow_cnn(in_channels=in_channels, hidden_dim=hidden_dim)
+        # self.shallow_cnn = DeepCNN300(in_channels, num_in_features=48, hidden_dim=hidden_dim, dropout=dropout,)
+        self.shallow_cnn = efficientnet_backbone(in_channels, hidden_dim, dropout)
         self.pos_encoder = Adaptive2DPositionEncoder(in_channels=hidden_dim, max_h=max_h, max_w=max_w, dropout=dropout)
 
         self.blocks = nn.ModuleList(
             [
-                TransformerEncoderLayer2D(in_channels=hidden_dim, k_channels=hidden_dim, v_channels=hidden_dim, n_head=n_head, dropout=dropout)
+                TransformerEncoderLayer2D(in_channels=hidden_dim, filter_dim=filter_dim, k_channels=hidden_dim, v_channels=hidden_dim, n_head=n_head, dropout=dropout)
                 for _ in range(block_num)
             ]
         )
@@ -222,7 +206,7 @@ class TransformerEncoder(nn.Module):
 
 
 class TransformerDecoder(nn.Module):
-    def __init__(self, num_classes, hidden_dim, block_num, pad_id, st_id, n_head=8, dropout=0.1):
+    def __init__(self, num_classes, hidden_dim, filter_dim, block_num, pad_id, st_id, n_head=8, dropout=0.1):
         super(TransformerDecoder, self).__init__()
 
         self.embedding = nn.Embedding(num_embeddings=num_classes, embedding_dim=hidden_dim)
@@ -230,7 +214,7 @@ class TransformerDecoder(nn.Module):
 
         self.blocks = nn.ModuleList(
             [
-                TransformerDecoderLayer1D(in_channels=hidden_dim, k_channels=hidden_dim, v_channels=hidden_dim, n_head=n_head, dropout=dropout)
+                TransformerDecoderLayer1D(in_channels=hidden_dim, filter_dim=filter_dim, k_channels=hidden_dim, v_channels=hidden_dim, n_head=n_head, dropout=dropout)
                 for _ in range(block_num)
             ]
         )
@@ -259,31 +243,29 @@ class TransformerDecoder(nn.Module):
 
         return tgt
 
-    def forward(self, feats, texts=None, is_train=True, max_length=50, teacher_forcing_ratio=1.0):
+    def forward(self, feats, texts, is_train=True, max_length=50, teacher_forcing_ratio=1.0):
         if is_train and random.random() < teacher_forcing_ratio:
-            if texts is None:
-                raise Exception("In training, texts must have to be not None.")
-
             tgt = self.text_embedding(texts)
-            tgt = self.pos_encoder(tgt)
             tgt_mask = self.pad_mask(texts) | self.order_mask(texts)
 
+            tgt = self.pos_encoder(tgt)
             for block in self.blocks:
                 tgt = block(tgt, feats, tgt_mask, None)
             out = self.generator(tgt)
         else:
+            out = None
             texts = torch.full(size=(feats.size(0), 1), dtype=torch.long, fill_value=self.st_id, device=feats.device)
 
             for _ in range(max_length):
                 tgt = self.text_embedding(texts)
-                tgt = self.pos_encoder(tgt)
                 tgt_mask = self.order_mask(texts)
 
+                tgt = self.pos_encoder(tgt)
                 for block in self.blocks:
-                    out = block(tgt, feats, tgt_mask, None)
-                out = self.generator(out)
-                next_text = torch.argmax(out[:, -1:, :], dim=-1)
+                    tgt = block(tgt, feats, tgt_mask, None)
+                out = self.generator(tgt)
 
+                next_text = torch.argmax(out[:, -1:, :], dim=-1)
                 texts = torch.cat([texts, next_text], dim=-1)
 
         return out
@@ -296,6 +278,7 @@ class SATRN(nn.Module):
         self.encoder = TransformerEncoder(
             in_channels=3 if config.data.rgb else 1,
             hidden_dim=config.model.hidden_dim,
+            filter_dim=config.model.filter_dim,
             block_num=config.model.n_e,
             n_head=config.model.num_head,
             dropout=config.model.dropout_rate,
@@ -303,6 +286,7 @@ class SATRN(nn.Module):
         self.decoder = TransformerDecoder(
             num_classes=len(tokenizer.token_to_id),
             hidden_dim=config.model.hidden_dim,
+            filter_dim=config.model.filter_dim,
             block_num=config.model.n_d,
             pad_id=tokenizer.token_to_id[tokenizer.PAD_TOKEN],
             st_id=tokenizer.token_to_id[tokenizer.START_TOKEN],
