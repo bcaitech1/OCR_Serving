@@ -18,7 +18,7 @@
 
 ### model weight 
 학습된 모델을 다운 링크 입니다. core/weight 디렉토리 안에 넣고 모델 불러오는 함수 호출 할때 인자로 해당 파일 경로를 넣어야 합니다.
-- SATRN : [Download](https://drive.google.com/file/d/1HhDG3eNpVO4VICIGvZzBsdTbRFS8mODA/view?usp=sharing)
+- SATRN : [Download](https://drive.google.com/file/d/1Kppt7rTIGxm8iV_zsM4f_vu9CVfVaeu7/view?usp=sharing)
 
 ### Docker build & Run
 기본적으로 Docker와 nvidia-docker 가 해당 서버 또는 로컬에 설치 되어 있어야 합니다.
