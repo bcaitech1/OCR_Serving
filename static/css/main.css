@@ -30,7 +30,7 @@ img {
 .title-label {
     padding-top: 1.5vh;
     padding-bottom: 2vh;
-    font-size: 6vh;
+    font-size: 5vh;
 }
 
 .upload-form {
@@ -54,7 +54,7 @@ img {
 }
 
 .user-img {
-    width: 35vw;
+    width: 30vw;
     padding-bottom: 3vh;
     max-width: 100%;
 
