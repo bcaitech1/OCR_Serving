@@ -10,6 +10,12 @@
 ![arch](./img/architecture.png)
 
 
+
+### 데모 페이지 작동 영상
+https://user-images.githubusercontent.com/42488309/123295550-c68a8980-d550-11eb-90ff-0e1a8debb418.mp4
+
+
+
 ### Stack
 - Flask
 - js
