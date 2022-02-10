@@ -20,7 +20,7 @@ RUN apt-get update \
 COPY . ./
 RUN apt-get update
 RUN apt-get -y install libgl1-mesa-glx
-RUN pip3 install -r requirments.txt
+RUN pip3 install -r requirements.txt
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 # ENV MODEL_PATH /checkpoint/model.pth ??
